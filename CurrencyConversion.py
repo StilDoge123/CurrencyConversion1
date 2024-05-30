@@ -5,7 +5,7 @@ import sys
 import json
 import os
 import requests
-# import ratelimit_requests_cache
+import requests_cache
 # ratelimit_requests_cache.install_cache('example_cache')
 # requests_cache.install_cache('demo_cache')
 
@@ -19,11 +19,13 @@ def is_date_valid(date_str):
     except ValueError:
         return False
 
+
 def is_amount_valid(amount):
     amount_str = str(amount)
     parts = amount_str.split(".")
 
     return len(parts) == 2 and len(parts[1]) == 2 and parts[0].isdecimal() and parts[1].isdecimal()
+
 
 def is_currency_code_valid(code):
     currency_codes = CurrencyCodes()
@@ -39,9 +41,9 @@ def main():
     date = args.date.strftime('%Y-%m-%d')
 
     flag = True
-    while flag == True:
+    while flag:
         input_amount = input()
-        while flag == True:
+        while flag:
             if input_amount.upper() == "END":
                 sys.exit()
             if (
@@ -51,7 +53,7 @@ def main():
             input_amount = input("Please enter a valid amount ")
 
         base_currency_input = input()
-        while flag == True:
+        while flag:
             if base_currency_input.upper() == "END":
                 sys.exit()
             if is_currency_code_valid(base_currency_input) != 0:
@@ -60,7 +62,7 @@ def main():
             base_currency_input = input("Please enter a valid currency code ")
 
         target_currency_input = input()
-        while flag == True:
+        while flag:
             if target_currency_input.upper() == "END":
                 sys.exit()
             if is_currency_code_valid(target_currency_input) != 0:
@@ -106,12 +108,6 @@ def main():
         with open(output_path, 'w') as json_file:
             json.dump(existing_data, json_file, indent=4)
 
+
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
